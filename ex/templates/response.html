@@ -1,0 +1,21 @@
+<table class="table table-bordered">
+  <tr>
+    <th style="text-align: center" width="15%">ชื่อ</th>
+    <th style="text-align: center" width="15%">นามสกุล</th>
+    <th style="text-align: center" width="15%">เวลาเข้างาน</th>
+    <th style="text-align: center" width="15%">เวลาออกงาน</th>
+    <th style="text-align: center" width="10%">วันที่ปฏิบัติงาน</th>
+  </tr>
+  {% for row in fetchTimelineRange %}
+  <tr>
+    <td align="left">{{row.name}}</td>
+    <td align="left">{{row.lastname}}</td>
+    <td align="center">{{row.time_in}}</td>
+    <td align="center">{{row.time_out}}</td>
+    <td align="center">{{row.dates}}</td>
+  </tr>
+  {% endfor %}
+</table>
+<p>
+  <a href="{{ url_for('export') }}">Generate CSV Report File</a>
+</p>

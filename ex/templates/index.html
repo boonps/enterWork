@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Date Range Search</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2 align="center">
+        Date Range Search with Python Flask PostgreSQL jQuery Ajax and
+        DatePicker
+      </h2>
+      <br />
+      <div class="row">
+        <div class="col-md-2">
+          <input
+            type="text"
+            name="From"
+            id="From"
+            class="form-control"
+            placeholder="From Date"
+          />
+        </div>
+        <div class="col-md-2">
+          <input
+            type="text"
+            name="to"
+            id="to"
+            class="form-control"
+            placeholder="To Date"
+          />
+        </div>
+        <div class="col-md-8">
+          <input
+            type="button"
+            name="range"
+            id="range"
+            value="Range"
+            class="btn btn-success"
+          />
+        </div>
+        <div class="clearfix"></div>
+        <br />
+      </div>
+      <div id="checkinDtt">
+        <table class="table table-bordered">
+          <tr>
+            <th style="text-align: center" width="15%">ชื่อ</th>
+            <th style="text-align: center" width="15%">นามสกุล</th>
+            <th style="text-align: center" width="15%">เวลาเข้างาน</th>
+            <th style="text-align: center" width="15%">เวลาออกงาน</th>
+            <th style="text-align: center" width="10%">วันที่ปฏิบัติงาน</th>
+          </tr>
+          {% for row in fetchTimeline %}
+          <tr>
+            <td align="left">{{row.name}}</td>
+            <td align="left">{{row.lastname}}</td>
+            <td align="center">{{row.time_in}}</td>
+            <td align="center">{{row.time_out}}</td>
+            <td align="center">{{row.dates}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $(document).ready(function () {
+        $.datepicker.setDefaults({
+          dateFormat: "yy-mm-dd",
+        });
+        $(function () {
+          $("#From").datepicker();
+          $("#to").datepicker();
+        });
+        $("#range").click(function () {
+          var From = $("#From").val();
+          var to = $("#to").val();
+          if (From != "" && to != "") {
+            $.ajax({
+              url: "/range",
+              method: "POST",
+              data: { From: From, to: to },
+              success: function (data) {
+                $("#checkinDtt").html(data);
+                $("#checkinDtt").append(data.htmlresponse);
+              },
+            });
+          } else {
+            var word = "ต้องการ";
+            alert(`กรุณาเลือกช่วงเวลาที่${word}`);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
